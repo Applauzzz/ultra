@@ -1,0 +1,75 @@
+dump_dir: /mnt/zehao/modelbase/gla-7B-freelong-batch8-64M-SP8-DPshards1
+name: gla-7B-freelong-chunk32k-64M-SP8-DPshards1-act
+steps: 3
+varlen: false
+seed: 42
+grad_acc_steps: 1
+optim:
+  scheduler: cosine
+  lr: 1e-5
+  weight_decay: 0.0
+  warmup: 200
+  lr_min_ratio: 0.001
+  clip: 1.0
+distributed:
+  fsdp_type: full_shard
+  compile: false
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  activation_checkpointing: true
+  tp_size: 1
+  dp_replicate: 1
+  dp_shard: 1
+  sp_size: 8
+model:
+  name_type: backbone
+  model_name: "gla"
+  config_path: "/mnt/zehao/modelbase/gla-7B-mistral-20B"
+  # pt_path: "/mnt/jfzn/lzh/modelbase/Qwen3-8B-Base"
+  seed: 42
+  dim: 4096
+  n_layers: 32
+  meta_init: true
+  # n_heads: 32
+  vocab_size: 32000
+  # memory_efficient_checkpointing: False
+  # chunk_size: null
+  # rope_theta: 1_000_000
+  # ffn_dim_multiplier: 3.0
+  # multiple_of: 256
+
+data:
+  sources:
+    load_from_disk./mnt/zehao/database/slimpajama-test-dataset: 100.0
+  batch_size: 1
+  prefetch_size: 3
+  # seq_len: 8192
+  # seq_len: 10240
+  # seq_len: 16384
+  # seq_len: 32768
+  # seq_len: 65536
+  # seq_len: 524288
+  # seq_len: 4194304  # 4M
+  # seq_len:  16777216 #16M 
+  # seq_len: 33554432  # 32M
+  seq_len: 67108864  # 64M
+  n_views: 1
+  load_async: true
+  add_bos: False
+  add_eos: False
+  pad_token_id: 0
+  tokenizer:
+    name: gla
+    path: /mnt/zehao/modelbase/gla-7B-mistral-20B
+checkpoint:
+  # init_ckpt_path: /mnt/jfzn/lzh/modelbase/gla-1B-dcp # must be a dcp model
+  dump:
+    every: 1_000
+    keep: 4
+logging:
+  freq: 1
+  wandb:
+    dir: ./wandb_log
+    entity: XLM
+    project: freelong-fsdp
+    group: gla-7b-mem-fuselinearCE-A800

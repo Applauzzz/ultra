@@ -1,0 +1,57 @@
+dump_dir: /mnt/zehao/ULTra/main/model_ckpt/ckpt/gru-freelong8k-40M-1m
+name: gru-freelong128k-fp32-40M-1m
+steps: 2
+varlen: false
+seed: 42
+grad_acc_steps: 1
+optim:
+  scheduler: cosine
+  lr: 3e-5
+  weight_decay: 0.0
+  warmup: 200
+  lr_min_ratio: 0.001
+  clip: 1.0
+distributed:
+  fsdp_type: no_shard
+  compile: false
+  model_dtype: fp32
+  matmul_allow_tf32: false
+  activation_checkpointing: true
+  tp_size: 1
+  dp_replicate: 1
+  dp_shard: 1
+  sp_size: 1
+model:
+  name_type: backbone
+  model_name: gru
+  config_path: /mnt/modelbase/modelbase/gru-config
+  seed: 42
+  dim: 512
+  n_layers: 4
+  meta_init: true
+  vocab_size: 32000
+data:
+  sources:
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_High-Quality_jsonl: 100
+  batch_size: 1
+  prefetch_size: 2
+  seq_len: 1048576
+  n_views: 1
+  load_async: true
+  add_bos: false
+  add_eos: false
+  pad_token_id: 0
+  tokenizer:
+    name: gla
+    path: /mnt/modelbase/modelbase/mistral-7b
+checkpoint:
+  dump:
+    every: 1000
+    keep: 4
+logging:
+  freq: 1
+  wandb:
+    dir: ./wandb_log
+    entity: XLM
+    project: freelong-gru
+    group: ultra-40N

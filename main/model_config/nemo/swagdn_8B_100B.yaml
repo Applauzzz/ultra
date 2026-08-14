@@ -1,0 +1,113 @@
+name: swagdn-8B-CC
+dump_dir: /mnt/zehao/modelbase/nemotron/qwen-8B-100B
+seed: 42
+varlen: false
+grad_acc_steps: 4
+gc_collect_freq: 1000
+random_data: false
+steps: 10000
+data:
+  root_dir: null
+  sources:
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_High-Quality_jsonl: 25.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_Medium-High-Quality_jsonl: 15.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_Medium-Quality_jsonl: 10.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_High-Quality-Synthetic_jsonl: 20.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_Diverse-QA_jsonl: 5.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-v2_Translated-Diverse-QA_jsonl: 5.0
+    jsonl./mnt_upfs/datasets/Nemotron-Pretraining-SFT-v1_Nemotron-SFT-Code_jsonl: 5.0
+    jsonl./mnt_upfs/datasets/Nemotron-Pretraining-SFT-v1_Nemotron-SFT-General_jsonl: 5.0
+    jsonl./mnt_upfs/datasets/Nemotron-Pretraining-SFT-v1_Nemotron-SFT-MATH_jsonl: 5.0
+    jsonl./mnt_upfs/datasets/Nemotron-CC-Math-v1_3_jsonl: 5.0
+  batch_size: 8
+  seq_len: 8192
+  n_views: 1
+  seed: 42
+  add_bos: false
+  add_eos: false
+  load_async: true
+  prefetch_size: 256
+  pad_token_id: 0
+  tokenizer:
+    name: qwen3
+    path: /mnt/modelbase/modelbase/qwen-3-1.7b-base
+optim:
+  lr: 0.0003
+  weight_decay: 0.0
+  epsilon: 1.0e-12
+  beta1: 0.9
+  beta2: 0.95
+  clip: 1.0
+  scheduler: cosine
+  warmup: 200
+  lr_min_ratio: 0.001
+  cycle_length: 1.0
+  cosine_theta: 1.0
+  annealing_step: 1000
+  decay_fraction: 0.1
+  exp_factor: 0.5
+model:
+  name_type: backbone
+  model_name: qwen3
+  pt_path: /mnt/modelbase/modelbase/qwen3-8b-fla-model
+  seed: 42
+  config_path: /mnt/modelbase/modelbase/qwen3-8b-fla-model
+  dim: 4096
+  n_layers: 36
+  max_seqlen: 8192
+  vocab_size: 151936
+  meta_init: true
+distributed:
+  dp_shard: 32
+  dp_replicate: 1
+  sp_size: 1
+  tp_size: 1
+  activation_checkpointing: true
+  compile: false
+  fsdp_type: full_shard
+  model_dtype: bf16
+  float8_recipe: null
+  float8_filter: layers\.[0-9]+\.
+  matmul_allow_tf32: true
+  detect_anomaly: false
+  compile_cache_size_limit: 8
+  spawn_method: forkserver
+env:
+  MKL_SERVICE_FORCE_INTEL: GNU
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+  TORCH_NCCL_AVOID_RECORD_STREAMS: '1'
+  NCCL_IB_TIMEOUT: '22'
+  NCCL_DEBUG: INFO
+  TORCH_NCCL_ASYNC_ERROR_HANDLING: '1'
+checkpoint:
+  dump:
+    every: 1000
+    keep: 10
+  # path: /mnt/zehao/modelbase/nemotron/swagdn-8B-100B/checkpoints
+  # init_ckpt_path: /mnt/zehao/modelbase/nemotron/swagdn-8B-100B/checkpoints/0000002000
+  continue_training_from_init: False
+logging:
+  freq: 1
+  acc_freq: null
+  wandb:
+    job_type: null
+    dir: ./wandb_log
+    project: nemo_debug
+    entity: XLM
+    tags: null
+    group: qwen3-8B
+    name: qwen3-8B-CC
+    notes: null
+    config_exclude_keys: null
+    config_include_keys: null
+    anonymous: null
+    mode: null
+    allow_val_change: null
+    resume: null
+    force: null
+    tensorboard: null
+    sync_tensorboard: null
+    monitor_gym: null
+    save_code: null
+    id: null

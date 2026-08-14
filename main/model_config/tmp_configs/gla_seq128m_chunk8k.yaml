@@ -1,0 +1,58 @@
+dump_dir: /mnt/zehao/ULTra/ckpt/Ultra-gla/gla-freelong-gla-seq128m-chunk8k
+name: freelong-gla-seq128m-chunk8k
+steps: 3
+varlen: false
+seed: 42
+grad_acc_steps: 1
+optim:
+  scheduler: cosine
+  lr: 1e-5
+  weight_decay: 0.0
+  warmup: 50
+  lr_min_ratio: 0.001
+  clip: 1.0
+distributed:
+  fsdp_type: full_shard
+  compile: false
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  activation_checkpointing: true
+  tp_size: 1
+  dp_replicate: 1
+  dp_shard: 1
+  sp_size: 8
+model:
+  name_type: backbone
+  model_name: gla
+  config_path: /mnt/zehao/modelbase/gla-7B-mistral-20B
+  seed: 42
+  dim: 4096
+  n_layers: 32
+  meta_init: true
+  vocab_size: 32000
+  chunk_size: 8192
+data:
+  sources:
+    load_from_disk./mnt/zehao/database/slimpajama-test-dataset: 100.0
+  batch_size: 1
+  prefetch_size: 3
+  seq_len: 134217728
+  n_views: 1
+  load_async: true
+  add_bos: false
+  add_eos: false
+  pad_token_id: 0
+  tokenizer:
+    name: gla
+    path: /mnt/zehao/modelbase/gla-7B-mistral-20B
+checkpoint:
+  dump:
+    every: 10000
+    keep: 2
+logging:
+  freq: 1
+  wandb:
+    dir: ./wandb_log
+    entity: XLM
+    project: freelong-chunk-ablation
+    group: gla-1B-128k-chunkablation

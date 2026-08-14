@@ -1,0 +1,57 @@
+dump_dir: /mnt/zehao/ULTra/main/model_ckpt/ckpt/gla-64m
+name: freelong-gla-freelong-64m
+steps: 3
+varlen: false
+seed: 42
+grad_acc_steps: 1
+optim:
+  scheduler: cosine
+  lr: 1e-5
+  weight_decay: 0.0
+  warmup: 200
+  lr_min_ratio: 0.001
+  clip: 1.0
+distributed:
+  fsdp_type: full_shard
+  compile: false
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  activation_checkpointing: true
+  tp_size: 1
+  dp_replicate: 1
+  dp_shard: 1
+  sp_size: 8
+model:
+  name_type: backbone
+  model_name: gla
+  config_path: /mnt/zehao/modelbase/gla-7B-mistral-20B
+  seed: 42
+  dim: 2048
+  n_layers: 32
+  meta_init: true
+  vocab_size: 32000
+data:
+  sources:
+    load_from_disk./mnt/zehao/database/slimpajama-test-dataset: 100.0
+  batch_size: 1
+  prefetch_size: 3
+  n_views: 1
+  load_async: true
+  add_bos: false
+  add_eos: false
+  pad_token_id: 0
+  tokenizer:
+    name: gla
+    path: /mnt/zehao/modelbase/gla-7B-mistral-20B
+  seq_len: 67108864
+checkpoint:
+  dump:
+    every: 1000
+    keep: 4
+logging:
+  freq: 1
+  wandb:
+    dir: ./wandb_log
+    entity: XLM
+    project: freelong-dbuge
+    group: gla-7b-mem-fuselinearCE-A800

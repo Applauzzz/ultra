@@ -1,0 +1,63 @@
+# dump_dir: !!!CHANGE_THIS!!!
+name: large_lm
+steps: 60_000
+seed: 42
+grad_acc_steps: 1
+
+optim:
+  scheduler: cosine
+  lr: 3e-3
+  weight_decay: 0.033
+  warmup: 5000
+  lr_min_ratio: 0.000001
+  clip: 1.0
+
+distributed:
+  fsdp_type: full_shard
+  compile: false
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  selective_activation_checkpointing: false
+  tp_size: 1
+  dp_replicate: 1
+  sp_replicate: 1
+  dp_shard: 8
+  sp_shard: 1
+
+model:
+  name_type: model
+  model_name: transformer
+  seed: 42
+  dim: 2048
+  # config_path: !!!CHANGE_THIS!!!
+  n_layers: 25
+
+data:
+  # root_dir: !!!CHANGE_THIS!!!
+  sources:
+    jsonl:path2data: 50.0
+    load_dataset:path2data: 30.0
+    load_from_disk:path2data: 20.0
+  batch_size: 4
+  prefetch_size: 512
+  seq_len: 2048
+  n_views: 1
+  load_async: true
+  add_bos: true
+  add_eos: true
+  tokenizer:
+    name: huggingface
+    # path: !!!CHANGE_THIS!!!
+
+checkpoint:
+  dump:
+    every: 2500
+    keep: 10
+
+logging:
+  freq: 10
+  wandb:
+    # dir: !!!CHANGE_THIS!!!
+    # entity: !!!CHANGE_THIS!!!
+    # project: !!!CHANGE_THIS!!!
+    # group: !!!CHANGE_THIS!!!

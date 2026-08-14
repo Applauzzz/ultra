@@ -1,0 +1,10 @@
+export WANDB_OFFICIAL=1;
+export HF_DATASETS_CACHE="$1";
+export HUGGINGFACE_HUB_CACHE="$2";
+export WANDB_API_KEY="$3";
+torchrun --nproc_per_node=8 \
+        --nnodes=1 \
+        --node_rank=$ARNOLD_ID \
+        --master_addr=$ARNOLD_WORKER_0_HOST \
+        --master_port=${ARNOLD_WORKER_0_PORT%%,*} \
+        ./main/train.py config=./trail/transformer_1B.yaml

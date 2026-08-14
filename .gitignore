@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+# IDE / notebooks
+.vscode/
+*.ipynb
+
+# Slurm logs
+slurm-*.out
+
+# Training logs / checkpoints
+wandb/
+wandb_log/
+model_log/
+model_ckpt/
+logs/
+outputs/
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+
+# Private / temporary files
+*private*
+*contexts*
+*results*

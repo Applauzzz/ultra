@@ -1,0 +1,57 @@
+dump_dir: /mnt/bn/tiktok-mm-5/aiic/users/CHOU_Yuhong/trial/janus_proj/sft/llama3_8b_janus_de_500k_10Bcpt_sft_tulu3_5e6lr
+name: llama3_8b_janus_de_500k_10Bcpt_sft_tulu3_5e6lr
+steps: 4_000
+varlen: false
+seed: 42
+grad_acc_steps: 4
+optim:
+  scheduler: cosine
+  lr: 5e-6
+  weight_decay: 0.0
+  warmup: 200
+  lr_min_ratio: 0.001
+  clip: 1.0
+distributed:
+  fsdp_type: full_shard
+  compile: false
+  model_dtype: bf16
+  matmul_allow_tf32: false
+  activation_checkpointing: true
+  tp_size: 1
+  dp_replicate: 1
+  dp_shard: 32
+  sp_size: 1
+model:
+  name_type: model
+  model_name: janus_de
+  seed: 42
+  dim: 4096
+  vocab_size: 128256
+  config_path: /mnt/bn/tiktok-mm-5/aiic/users/CHOU_Yuhong/codebase/long_context_team/ULTra/main/model_config/ALongProj/SFT_LLama8B/janus_de
+  n_layers: 32
+data:
+  sources:
+    load_from_disk./mnt/bn/tiktok-mm-5/aiic/users/CHOU_Yuhong/data/tulu-3-sft-olmo-2-mixture_shuffle: 100.0
+  batch_size: 1
+  prefetch_size: 64
+  seq_len: 8192
+  n_views: 1
+  load_async: true
+  add_bos: true
+  add_eos: true
+  pad_token_id: 128255
+  tokenizer:
+    name: huggingface
+    path: /mnt/bn/tiktok-mm-5/aiic/users/CHOU_Yuhong/model/llama3_8b
+checkpoint:
+  init_ckpt_path: /mnt/bn/tiktok-mm-5/aiic/users/CHOU_Yuhong/trial/janus_proj/sft/llama3_8b_janus_de_10B_cpt/checkpoints/0000005000
+  dump:
+    every: 1_000
+    keep: 4
+logging:
+  freq: 1
+  wandb:
+    dir: ./wandb
+    entity: XLM
+    project: janus_sft
+    group: janus_sft
