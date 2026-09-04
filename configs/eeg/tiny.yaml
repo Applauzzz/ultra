@@ -1,0 +1,78 @@
+# EEG MAE Training Configuration - Tiny Model
+# Faster training, smaller model for quick experiments
+
+name: eeg_mae_tiny
+dump_dir: outputs/eeg_mae_tiny
+
+seed: 42
+steps: 5000
+grad_acc_steps: 1
+
+data:
+  data_path: /mnt/zehao/eeg_infra/data
+  subset: all
+  window_duration: 10000
+  clip: 10.0
+  masking_ratio: 0.75
+  masking_window: 200
+  masking_overlap: 20
+  use_block_masking: false
+  batch_size: 512  # Larger batch for tiny model
+  num_workers: 16
+  prefetch_factor: 3
+  persistent_workers: true
+
+model:
+  # Encoder: 256d, 12 layers
+  encoder_embed_dim: 256
+  encoder_depth: 12
+  encoder_heads: 4
+  encoder_head_dim: 64
+  encoder_mlp_dim_ratio: 2.66
+  encoder_use_geglu: true
+
+  # Decoder: 256d, 4 layers
+  decoder_embed_dim: 256
+  decoder_depth: 4
+  decoder_heads: 4
+  decoder_head_dim: 64
+  decoder_mlp_dim_ratio: 2.66
+  decoder_use_geglu: true
+
+  patch_size: 100
+  patch_overlap: 20
+  freqs: 4
+  noise_ratio: 0.0025
+  masking_ratio: 0.75
+  token_avg: false
+  meta_init: true
+
+optim:
+  lr: 3e-4
+  beta1: 0.9
+  beta2: 0.95
+  weight_decay: 0.0
+  clip: 5.0
+  scheduler: cosine
+  warmup: 200
+  lr_min_ratio: 0.1
+
+distributed:
+  dp_replicate: 1
+  dp_shard: 2  # 2 GPUs for tiny model
+  tp_size: 1
+  sp_size: 1
+  fsdp_type: full_shard
+
+checkpoint:
+  dump:
+    every: 500
+
+logging:
+  freq: 10
+  wandb:
+    dir: ./wandb_log
+    entity: XLM
+    mode: online  # Change to "online" to enable WandB logging
+    project: eeg
+    tags: ["eeg", "mae", "tiny"]

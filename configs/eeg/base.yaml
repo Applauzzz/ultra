@@ -1,0 +1,115 @@
+# EEG MAE Training Configuration - Base Model
+# Based on eeg_infra config_train.yaml
+
+name: eeg_mae_base
+dump_dir: outputs/eeg_mae_base
+
+seed: 42
+steps: 10000
+grad_acc_steps: 1
+gc_collect_freq: 1000
+
+# ==================== Data Configuration ====================
+data:
+  # Data paths
+  data_path: /mnt/zehao/eeg_infra/data
+  subset: all  # all, small, or open
+
+  # Window and preprocessing
+  window_duration: 10000  # 10 seconds at 1000Hz
+  clip: 10.0
+
+  # Masking configuration
+  masking_ratio: 0.75
+  masking_window: 200
+  masking_overlap: 20
+  use_block_masking: false
+
+  # DataLoader configuration
+  batch_size: 300
+  num_workers: 16
+  prefetch_factor: 3
+  persistent_workers: true
+
+# ==================== Model Configuration ====================
+model:
+  # Encoder configuration (Base model: 512d, 22 layers)
+  encoder_embed_dim: 512
+  encoder_depth: 22
+  encoder_heads: 8
+  encoder_head_dim: 64
+  encoder_mlp_dim_ratio: 2.66
+  encoder_use_geglu: true
+
+  # Decoder configuration (512d, 8 layers)
+  decoder_embed_dim: 512
+  decoder_depth: 8
+  decoder_heads: 8
+  decoder_head_dim: 64
+  decoder_mlp_dim_ratio: 2.66
+  decoder_use_geglu: true
+
+  # Patch configuration
+  patch_size: 200
+  patch_overlap: 20
+  freqs: 4
+  noise_ratio: 0.0025
+
+  # Masking
+  masking_ratio: 0.75
+
+  # Token averaging (optional auxiliary loss)
+  token_avg: false
+  token_avg_lambda: 0.1
+
+  # Initialization
+  init_std: 0.02
+  init_cutoff_factor: 3.0
+
+  # Meta initialization (for FSDP)
+  meta_init: true
+
+# ==================== Optimizer Configuration ====================
+optim:
+  lr: 2.4e-4
+  beta1: 0.9
+  beta2: 0.95
+  weight_decay: 0.0
+  clip: 5.0
+
+  # Learning rate schedule
+  scheduler: cosine
+  warmup: 500
+  lr_min_ratio: 0.1
+
+# ==================== Distributed Configuration ====================
+distributed:
+  # DDP configuration (no sharding)
+  dp_replicate: 4  # DDP over 4 GPUs
+  dp_shard: 1      # No sharding for DDP
+  tp_size: 1
+  sp_size: 1
+
+  fsdp_type: no_shard  # Use DDP instead of FSDP
+
+  # Compile settings
+  compile: false
+
+# ==================== Checkpoint Configuration ====================
+checkpoint:
+  path: null  # Will be set to dump_dir/checkpoints
+  init_ckpt_path: null  # Path to initial checkpoint (optional)
+
+  dump:
+    every: 1000  # Save checkpoint every N steps
+
+# ==================== Logging Configuration ====================
+logging:
+  freq: 10  # Log every N steps
+
+  wandb:
+    project: eeg
+    entity: XLM
+    mode: online  # WandB logging enabled
+    tags: ["eeg", "mae", "base"]
+    notes: "EEG MAE Base model training"
