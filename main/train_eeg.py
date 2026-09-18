@@ -144,12 +144,43 @@ def train(args: EEGTrainArgs):
 
         init_logger(Path(args.dump_dir) / "train.log")
         setup_env(args.env)
+
+        # ==================== Early DataLoader Creation (Before NCCL Init) ====================
+        # CRITICAL: Create DataLoader BEFORE setup_torch_distributed to avoid fork-after-NCCL deadlock
+        # torch.distributed.run sets these env vars before launching processes
+        logger.info("Creating DataLoader before NCCL initialization to avoid worker deadlock")
+
+        # Read rank info from environment variables (set by torch.distributed.run)
+        local_rank = int(os.environ.get("LOCAL_RANK", 0))
+        rank = int(os.environ.get("RANK", 0))
+        world_size = int(os.environ.get("WORLD_SIZE", 1))
+
+        logger.info(f"Pre-init rank info from env: rank={rank}, local_rank={local_rank}, world_size={world_size}")
+
+        # For simplicity, use rank as both dp_rank and loader_rank
+        # This matches single-GPU-per-rank setup
+        args.data.world_size = world_size
+        args.data.rank = rank
+
+        # Build DataLoader BEFORE NCCL initialization
+        data_loader_early, data_loader_state = build_eeg_dataloader(
+            args.data,
+            train=True,
+            state=None,
+        )
+
+        # CRITICAL: Create iterator NOW (fork workers before NCCL init)
+        logger.info(f"Creating DataLoader iterator (will fork {args.data.num_workers} workers per rank)")
+        data_loader_early_iter = iter(data_loader_early)
+        logger.info("DataLoader workers created successfully BEFORE NCCL initialization")
+
+        # ==================== Now Initialize NCCL ====================
         setup_torch_distributed(args.distributed)
 
         world_mesh = get_device_mesh(args.distributed)
         logger.info(f"Starting EEG MAE training job: {args.name}")
 
-        # Get distributed ranks
+        # Get distributed ranks (verify they match env vars)
         dp_mesh = world_mesh["dp_replicate"]
         dp_degree = dp_mesh.size()
         dp_rank = dp_mesh.get_local_rank()
@@ -164,6 +195,10 @@ def train(args: EEGTrainArgs):
 
         logger.info(f"DP rank: {dp_rank}/{dp_degree}")
         logger.info(f"Loader rank: {loader_rank}/{loader_degree}")
+
+        # Verify ranks match
+        assert loader_rank == rank, f"Loader rank mismatch: {loader_rank} != {rank}"
+        assert loader_degree == world_size, f"Loader degree mismatch: {loader_degree} != {world_size}"
 
         # Set random seed
         torch.manual_seed(args.seed)
@@ -219,20 +254,11 @@ def train(args: EEGTrainArgs):
         # ==================== Build Optimizer ====================
         optimizer, scheduler = build_optimizer(model, args.optim, args.steps)
 
-        # ==================== Build DataLoader ====================
-        logger.info("Building EEG DataLoader")
-
-        # Set distributed args for dataloader
-        args.data.world_size = loader_degree
-        args.data.rank = loader_rank
-
-        data_loader, data_loader_state = build_eeg_dataloader(
-            args.data,
-            train=True,
-            state=None,
-        )
-
-        logger.info(f"DataLoader built: {len(data_loader)} batches")
+        # ==================== DataLoader Already Created ====================
+        # DataLoader was created before NCCL init to avoid fork deadlock
+        # Use the early-created loader and iterator
+        data_loader = data_loader_early
+        logger.info(f"Using early-created DataLoader: {len(data_loader)} batches")
 
         # ==================== Training State ====================
         train_state = EEGTrainState(
@@ -271,8 +297,8 @@ def train(args: EEGTrainArgs):
         time_last_log = time.time()
         gc.collect()
 
-        # Convert DataLoader to iterator
-        data_loader = iter(data_loader)
+        # Use the early-created iterator (workers already forked before NCCL init)
+        data_loader_iter = data_loader_early_iter
 
         logger.info("Starting training loop")
 
@@ -291,19 +317,13 @@ def train(args: EEGTrainArgs):
 
             # Get batch
             try:
-                eeg, pos, batch_mask, batch_unmask = next(data_loader)
+                eeg, pos, batch_mask, batch_unmask = next(data_loader_iter)
             except StopIteration:
-                # Restart data loader
-                data_loader = iter(
-                    context_stack.enter_context(
-                        build_eeg_dataloader(
-                            args.data,
-                            train=True,
-                            state=train_state.data_loader_state,
-                        )[0]
-                    )
-                )
-                eeg, pos, batch_mask, batch_unmask = next(data_loader)
+                # Restart data loader iterator
+                # With persistent_workers=True, workers stay alive, so iter() won't fork again
+                logger.info("DataLoader epoch finished, creating new iterator (workers persist)")
+                data_loader_iter = iter(data_loader)
+                eeg, pos, batch_mask, batch_unmask = next(data_loader_iter)
 
             # Move to CUDA
             eeg = eeg.to("cuda")

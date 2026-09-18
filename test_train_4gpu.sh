@@ -14,12 +14,15 @@ export CUDA_LAUNCH_BLOCKING=1
 export TORCH_SHOW_CPP_STACKTRACES=1
 export TRITON_AUTOTUNE=0
 export TRITON_ENABLE_AUTOTUNING=0
-
+# unset NCCL_IB_DISABLE
+# export NCCL_IB_HCA=mlx5_0
+# export NCCL_SOCKET_IFNAME=eth1
+# export GLOO_SOCKET_IFNAME=eth1
 # Use GPUs 4,5,6,7
 export CUDA_VISIBLE_DEVICES=4,5,6,7
 
 # Configuration
-CONFIG="configs/eeg/tiny.yaml"
+CONFIG="configs/eeg/base.yaml"
 STEPS=10000
 NAME="eeg_test_4gpu_$(date +%Y%m%d_%H%M%S)"
 
@@ -37,10 +40,8 @@ echo "Starting training..."
 python -m torch.distributed.run --nproc_per_node=4 \
   main/train_eeg.py \
   config=$CONFIG \
-  distributed.dp_replicate=4 \
-  distributed.dp_shard=1 \
-  distributed.fsdp_type=no_shard \
-  data.batch_size=8 \
+  data.num_workers=4 \
+  grad_acc_steps=2 \
   steps=$STEPS \
   logging.freq=5 \
   logging.wandb.mode=online \

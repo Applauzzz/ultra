@@ -13,10 +13,14 @@ data:
   subset: all
   window_duration: 10000
   clip: 10.0
-  masking_ratio: 0.75
+  masking_ratio: 0.55  # Matches eeg_infra
   masking_window: 200
   masking_overlap: 20
-  use_block_masking: false
+  use_block_masking: true  # Enable block masking
+  radius_spat_mask: 0.03
+  radius_temp_mask: 3
+  dropout_ratio: 0.1
+  dropout_radius: 0.04
   batch_size: 512  # Larger batch for tiny model
   num_workers: 16
   prefetch_factor: 3
@@ -43,8 +47,9 @@ model:
   patch_overlap: 20
   freqs: 4
   noise_ratio: 0.0025
-  masking_ratio: 0.75
-  token_avg: false
+  masking_ratio: 0.55  # Matches eeg_infra
+  token_avg: true
+  token_avg_lambda: 0.1
   meta_init: true
 
 optim:

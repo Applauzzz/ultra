@@ -12,24 +12,28 @@ gc_collect_freq: 1000
 # ==================== Data Configuration ====================
 data:
   # Data paths
-  data_path: /mnt/zehao/eeg_infra/data
+  data_path: /mnt_upfs/zehao/database/egg/reve_official_data
   subset: all  # all, small, or open
 
   # Window and preprocessing
-  window_duration: 10000  # 10 seconds at 1000Hz
+  window_duration: 2000  # 10 seconds at 1000Hz
   clip: 10.0
 
-  # Masking configuration
-  masking_ratio: 0.75
+  # Masking configuration (matches eeg_infra preprocessing/default.yaml)
+  masking_ratio: 0.55  # Changed from 0.75 to match eeg_infra
   masking_window: 200
   masking_overlap: 20
-  use_block_masking: false
+  use_block_masking: true  # Enable block masking
+  radius_spat_mask: 0.03   # Spatial masking radius
+  radius_temp_mask: 3      # Temporal masking radius
+  dropout_ratio: 0.1       # Dropout ratio
+  dropout_radius: 0.04     # Dropout radius
 
   # DataLoader configuration
   batch_size: 300
-  num_workers: 16
+  num_workers: 2
   prefetch_factor: 3
-  persistent_workers: true
+  persistent_workers: true  # CRITICAL: Keep workers alive to avoid re-forking after NCCL init
 
 # ==================== Model Configuration ====================
 model:
@@ -55,11 +59,11 @@ model:
   freqs: 4
   noise_ratio: 0.0025
 
-  # Masking
-  masking_ratio: 0.75
+  # Masking (must match data.masking_ratio)
+  masking_ratio: 0.55  # Matches eeg_infra
 
-  # Token averaging (optional auxiliary loss)
-  token_avg: false
+  # Token averaging (optional auxiliary loss) - matches eeg_infra
+  token_avg: true
   token_avg_lambda: 0.1
 
   # Initialization
@@ -67,11 +71,12 @@ model:
   init_cutoff_factor: 3.0
 
   # Meta initialization (for FSDP)
-  meta_init: true
+  # IMPORTANT: meta_init causes hang in multi-GPU during model.to_empty()
+  meta_init: false
 
 # ==================== Optimizer Configuration ====================
 optim:
-  lr: 2.4e-4
+  lr: 2e-4
   beta1: 0.9
   beta2: 0.95
   weight_decay: 0.0

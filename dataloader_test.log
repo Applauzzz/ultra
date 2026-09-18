@@ -1,0 +1,86 @@
+Running standalone DataLoader test
+===================================
+Using conda environment: ultra_2
+
+Python location: /mnt_upfs/miniconda/envs/ultra_2/bin/python
+Python version: Python 3.12.13
+
+Python: 3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+Working directory: /mnt/zehao/ultra
+============================================================
+EEG DataLoader Standalone Test
+============================================================
+
+Configuration:
+  Data path: /mnt_upfs/zehao/database/egg/reve_official_data
+  Subset: all
+  Batch size: 16
+  Num workers: 0
+  Persistent workers: False
+
+--------------------Building DataLoader---------------------
+✓ DataLoader built in 8.16s
+  Total batches: 471148
+
+------------Testing iteration (first 5 batches)-------------
+✓ DataLoader iterator created in 0.96s
+  Batch 1:
+    EEG shape: torch.Size([13, 19, 10000])
+    Positions shape: torch.Size([13, 19, 3])
+    Mask shape: torch.Size([13, 783])
+    Unmask shape: torch.Size([13, 262])
+    Load time: 0.167s
+    EEG dtype: torch.float32, range: [-10.00, 8.58]
+  Batch 2:
+    EEG shape: torch.Size([13, 19, 10000])
+    Positions shape: torch.Size([13, 19, 3])
+    Mask shape: torch.Size([13, 783])
+    Unmask shape: torch.Size([13, 262])
+    Load time: 0.055s
+  Batch 3:
+    EEG shape: torch.Size([13, 19, 10000])
+    Positions shape: torch.Size([13, 19, 3])
+    Mask shape: torch.Size([13, 783])
+    Unmask shape: torch.Size([13, 262])
+    Load time: 0.016s
+  Batch 4:
+    EEG shape: torch.Size([13, 19, 10000])
+    Positions shape: torch.Size([13, 19, 3])
+    Mask shape: torch.Size([13, 783])
+    Unmask shape: torch.Size([13, 262])
+    Load time: 0.032s
+  Batch 5:
+    EEG shape: torch.Size([13, 19, 10000])
+    Positions shape: torch.Size([13, 19, 3])
+    Mask shape: torch.Size([13, 783])
+    Unmask shape: torch.Size([13, 262])
+    Load time: 0.026s
+
+✓ Successfully loaded 5 batches
+
+============================================================
+Basic test PASSED - proceeding to worker tests
+============================================================
+
+============================================================
+Testing with workers
+============================================================
+
+-------------------Testing with 1 workers-------------------
+✓ Built in 5.61s
+✓ Iterator created in 1.77s
+✓ First batch loaded in 0.49s, shape: torch.Size([4, 63, 10000])
+
+-------------------Testing with 2 workers-------------------
+✓ Built in 5.85s
+✓ Iterator created in 2.01s
+✓ First batch loaded in 0.00s, shape: torch.Size([2, 125, 10000])
+
+-------------------Testing with 4 workers-------------------
+✓ Built in 6.02s
+✓ Iterator created in 2.16s
+✓ First batch loaded in 0.00s, shape: torch.Size([13, 19, 10000])
+
+===================================
+Test completed successfully!
+===================================

@@ -1,0 +1,58 @@
+Running distributed DataLoader test (4 GPUs)
+=============================================
+Starting test with torchrun...
+W0909 17:06:19.352000 2591483 site-packages/torch/distributed/run.py:766] 
+W0909 17:06:19.352000 2591483 site-packages/torch/distributed/run.py:766] *****************************************
+W0909 17:06:19.352000 2591483 site-packages/torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0909 17:06:19.352000 2591483 site-packages/torch/distributed/run.py:766] *****************************************
+============================================================
+Distributed DataLoader Test
+============================================================
+World size: 4
+GPUs: 4
+
+Configuration:
+  Batch size: 16
+  Num workers: 2
+  Total workers: 8
+
+--------------------Building DataLoader---------------------
+/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via `init_process_group` or `barrier `. Using the current device set by the user. 
+  warnings.warn(  # warn only once
+[rank1]:[W909 17:06:52.397174690 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 as device used by this process is currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to force use of a particular device.
+✓ DataLoader built in 9.87s
+  Batches per GPU: 117787
+/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via `init_process_group` or `barrier `. Using the current device set by the user. 
+  warnings.warn(  # warn only once
+/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via `init_process_group` or `barrier `. Using the current device set by the user. 
+  warnings.warn(  # warn only once
+[rank3]:[W909 17:06:53.442413744 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 as device used by this process is currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to force use of a particular device.
+[rank0]:[W909 17:06:53.541839823 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 as device used by this process is currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to force use of a particular device.
+/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/distributed_c10d.py:4631: UserWarning: No device id is provided via `init_process_group` or `barrier `. Using the current device set by the user. 
+  warnings.warn(  # warn only once
+[rank2]:[W909 17:06:53.544610140 ProcessGroupNCCL.cpp:4718] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 as device used by this process is currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. You can pecify device_id in init_process_group() to force use of a particular device.
+
+--------Testing iteration (first 3 batches per GPU)---------
+[Rank 1] ✓ Iterator created in 2.23s
+[Rank 1] Batch 1: shape=torch.Size([4, 64, 10000]), time=0.110s
+[Rank 0] ✓ Iterator created in 2.35s
+[Rank 1] Batch 2: shape=torch.Size([4, 64, 10000]), time=0.019s
+[Rank 3] ✓ Iterator created in 2.40s
+[Rank 1] Batch 3: shape=torch.Size([4, 64, 10000]), time=0.035s
+[Rank 2] ✓ Iterator created in 2.44s
+[Rank 0] Batch 1: shape=torch.Size([2, 125, 10000]), time=0.101s
+[Rank 0] Batch 2: shape=torch.Size([2, 125, 10000]), time=0.019s
+[Rank 0] Batch 3: shape=torch.Size([2, 125, 10000]), time=0.029s
+
+✓ All ranks successfully loaded batches
+[Rank 3] Batch 1: shape=torch.Size([2, 125, 10000]), time=0.126s
+[Rank 3] Batch 2: shape=torch.Size([2, 125, 10000]), time=0.014s
+[Rank 3] Batch 3: shape=torch.Size([2, 125, 10000]), time=0.040s
+[Rank 2] Batch 1: shape=torch.Size([16, 16, 10000]), time=0.143s
+[Rank 2] Batch 2: shape=torch.Size([16, 16, 10000]), time=0.000s
+[Rank 2] Batch 3: shape=torch.Size([16, 16, 10000]), time=0.055s
+[rank0]:[W909 17:06:57.543167233 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+
+=============================================
+Distributed test completed successfully!
+=============================================

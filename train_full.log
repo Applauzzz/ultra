@@ -1,0 +1,264 @@
+W0909 18:10:49.138000 2560719 site-packages/torch/distributed/run.py:766] 
+W0909 18:10:49.138000 2560719 site-packages/torch/distributed/run.py:766] *****************************************
+W0909 18:10:49.138000 2560719 site-packages/torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0909 18:10:49.138000 2560719 site-packages/torch/distributed/run.py:766] *****************************************
+Traceback (most recent call last):
+  File "/mnt/zehao/ultra/main/train_eeg.py", line 461, in <module>
+    main()
+Traceback (most recent call last):
+  File "/mnt/zehao/ultra/main/train_eeg.py", line 454, in main
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/mnt/zehao/ultra/main/train_eeg.py", line 461, in <module>
+  File "/mnt/zehao/ultra/main/train_eeg.py", line 461, in <module>
+      File "/mnt/zehao/ultra/main/train_eeg.py", line 461, in <module>
+cfg = OmegaConf.merge(default_cfg, file_cfg, cli_args)
+        main()
+main()      
+main()   File "/mnt/zehao/ultra/main/train_eeg.py", line 454, in main
+  
+  File "/mnt/zehao/ultra/main/train_eeg.py", line 454, in main
+        File "/mnt/zehao/ultra/main/train_eeg.py", line 454, in main
+ cfg = OmegaConf.merge(default_cfg, file_cfg, cli_args)    
+  cfg = OmegaConf.merge(default_cfg, file_cfg, cli_args)    cfg = OmegaConf.merge(default_cfg, file_cfg, cli_args)^^
+ 
+^^  ^   ^    ^     ^  ^^^    ^ ^^  ^ ^ ^^^ ^^^^ ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/omegaconf.py", line 273, in merge
+^^^^^^^^^^    target.merge_with(*configs[1:])^^^^
+^^^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 492, in merge_with
+^
+^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/omegaconf.py", line 273, in merge
+    ^self._format_and_raise(key=None, value=None, cause=e)^^
+^^^    ^^^target.merge_with(*configs[1:])^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+^
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/omegaconf.py", line 273, in merge
+^    ^^
+format_and_raise(  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 492, in merge_with
+      File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/omegaconf.py", line 273, in merge
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+target.merge_with(*configs[1:])
+            self._format_and_raise(key=None, value=None, cause=e)target.merge_with(*configs[1:])_raise(ex, cause)  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 492, in merge_with
+
+
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 492, in merge_with
+    self._format_and_raise(key=None, value=None, cause=e)    
+        self._format_and_raise(key=None, value=None, cause=e)format_and_raise(
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^format_and_raise(^    format_and_raise(
+^
+_raise(ex, cause)^^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 490, in merge_with
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+    self._merge_with(*others)
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 514, in _merge_with
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace    
+_raise(ex, cause)
+        _raise(ex, cause)^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+
+^^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^^^^^^^^^^^^^^            ^^BaseContainer._map_merge(self, other)raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full traceraise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace^
+
+
+^^^^^ ^ ^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 432, in _map_merge
+^    ^^^^ ^    ^^ ^^^dest[key] = src._get_node(key)^^^
+^^^^^^^^^^^  ^^^^ ^^ ^
+~^^^^^^~^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 490, in merge_with
+^~~^^^^^    ^^^self._merge_with(*others)^^^^^^
+^^^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 514, in _merge_with
+^^^^
+^^^^    ^^BaseContainer._map_merge(self, other)^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 310, in __setitem__
+^
+^^^    ^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 432, in _map_merge
+self._format_and_raise(
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+^^^    ^^^dest[key] = src._get_node(key)^    ^^
+format_and_raise(^^
+
+^^^ ^    File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 490, in merge_with
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+^ 
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 490, in merge_with
+~        ~~self._merge_with(*others)~_raise(ex, cause)    self._merge_with(*others)
+
+^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 514, in _merge_with
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 514, in _merge_with
+    ^    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full traceBaseContainer._map_merge(self, other)^
+    
+
+BaseContainer._map_merge(self, other)
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 432, in _map_merge
+    File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 310, in __setitem__
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 432, in _map_merge
+      dest[key] = src._get_node(key)
+    ^    dest[key] = src._get_node(key)
+^self._format_and_raise(  ^
+  ^  ^   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+~ ~^~~    ^^~~format_and_raise(^
+~~^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+^^^^^^^^^^^^
+    ^^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 310, in __setitem__
+_raise(ex, cause)^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 310, in __setitem__
+    ^
+^^    self._format_and_raise(
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+self._format_and_raise(  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^
+^    ^^    ^^format_and_raise(^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+
+^^      File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+format_and_raise(^
+^  ^   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 819, in format_and_raise
+     ^^^_raise(ex, cause)^^^    
+^^^_raise(ex, cause)^^^
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 308, in __setitem__
+^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^        raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace^self.__set_impl(key=key, value=value)
+
+^    ^raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+ ^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 318, in __set_impl
+^^^ ^^ ^^ ^^^ ^^  ^    ^ ^^self._set_item_impl(key, value)^
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 545, in _set_item_impl
+^^^^^^    ^^^^self._validate_set(key, value)^^^^^
+^^^^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 180, in _validate_set
+^^^^^^    ^^target = self._get_node(key) if key is not None else self^
+^^^^^^^^^ ^^^^
+ ^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 308, in __setitem__
+ ^^     ^^ ^self.__set_impl(key=key, value=value)^  ^ 
+^^ ^  ^^ ^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 318, in __set_impl
+^ ^^^^^^^^^    ^^^self._set_item_impl(key, value)^
+^^^^^^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 545, in _set_item_impl
+^^^^^^^^^    ^^
+self._validate_set(key, value)^
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 308, in __setitem__
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 180, in _validate_set
+^^^    self.__set_impl(key=key, value=value)^^
+^
+    ^^target = self._get_node(key) if key is not None else self  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 318, in __set_impl
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 308, in __setitem__
+
+    
+ self._set_item_impl(key, value)     self.__set_impl(key=key, value=value)
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 475, in _get_node
+ 
+   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 545, in _set_item_impl
+       File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 318, in __set_impl
+ self._validate_get(key)     
+ self._validate_set(key, value)     self._set_item_impl(key, value) 
+
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 180, in _validate_set
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 164, in _validate_get
+   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/basecontainer.py", line 545, in _set_item_impl
+          ^^target = self._get_node(key) if key is not None else selfself._format_and_raise(^    
+
+^self._validate_set(key, value)
+^   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+^   File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 180, in _validate_set
+^     format_and_raise(^     
+^ ^target = self._get_node(key) if key is not None else self ^^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+
+ ^^      ^
+ _raise(ex, cause)   
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 475, in _get_node
+       File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+     ^^ self._validate_get(key)    ^ 
+raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace^  
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 164, in _validate_get
+  ^      self._format_and_raise(^ ^
+^ ^^ ^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+^^^^^^^^^^^^^^^^^^^^    ^^^^^format_and_raise(^^^
+^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+^^
+^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 475, in _get_node
+^^    ^_raise(ex, cause)
+^    ^self._validate_get(key)^
+
+^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 164, in _validate_get
+^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 475, in _get_node
+    ^    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+^    self._format_and_raise(^self._validate_get(key)
+^
+^ ^^ ^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+ ^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/dictconfig.py", line 164, in _validate_get
+^ ^^^^^^^
+        format_and_raise(^
+^self._format_and_raise(^omegaconf.errors^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+^
+^.^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+^ConfigKeyError    ^: _raise(ex, cause)Key 'log_freq' not in 'EEGTrainArgs'
+    full_key: log_freq
+    object_type=EEGTrainArgs^
+    
+^^format_and_raise(  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^
+^^      File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 899, in format_and_raise
+raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+^ ^ ^     ^ ^_raise(ex, cause)^^^
+^^^^^  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/omegaconf/_utils.py", line 797, in _raise
+^^^^^    ^^^^^^raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace^^^^^
+^^^^^^ ^^^^^ ^^ ^^^ ^^^^^^^
+^^^^omegaconf.errors^^.^^^ConfigKeyError^^^^: ^Key 'log_freq' not in 'EEGTrainArgs'
+    full_key: log_freq
+    object_type=EEGTrainArgs^
+^^^^^^^^^^^^^^^^
+^omegaconf.errors^.ConfigKeyError^: ^Key 'log_freq' not in 'EEGTrainArgs'
+    full_key: log_freq
+    object_type=EEGTrainArgs^
+^^^^^^^^^^^^^^^^^^^^
+omegaconf.errors.ConfigKeyError: Key 'log_freq' not in 'EEGTrainArgs'
+    full_key: log_freq
+    object_type=EEGTrainArgs
+W0909 18:11:44.809000 2560719 site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2561291 closing signal SIGTERM
+W0909 18:11:44.813000 2560719 site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2561293 closing signal SIGTERM
+W0909 18:11:44.817000 2560719 site-packages/torch/distributed/elastic/multiprocessing/api.py:900] Sending process 2561294 closing signal SIGTERM
+E0909 18:11:44.858000 2560719 site-packages/torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 1 (pid: 2561292) of binary: /mnt_upfs/miniconda/envs/ultra_2/bin/python3.12
+Traceback (most recent call last):
+  File "/mnt_upfs/miniconda/envs/ultra_2/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt_upfs/miniconda/envs/ultra_2/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+main/train_eeg.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-09_18:11:44
+  host      : x2-4
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 2561292)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

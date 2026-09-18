@@ -9,6 +9,7 @@ import gc
 import random
 from collections import defaultdict
 from dataclasses import dataclass, field
+import os
 from os.path import join as pjoin
 from typing import Dict, Any, Optional, Iterator, Tuple
 
@@ -270,10 +271,11 @@ class EEGDataset(Dataset):
         self.max_counter = 500000
 
     def init_files_pos(self):
-        """Initialize memmap files and position cache."""
+        """Initialize memmap files and position file paths (lazy loading)."""
         import os
         self.files = {}
-        self.positions_cache = {}
+        self.positions_cache = {}  # Will store loaded positions on-demand
+        self.position_paths = {}  # Store file paths for lazy loading
 
         for recording_data in self.data_big:
             r_i = int(recording_data["big_recording_index"])
@@ -298,7 +300,8 @@ class EEGDataset(Dataset):
                 dtype="float32",
             )
             self.files[r_i] = memmap_array
-            self.positions_cache[r_i] = np.load(pos_file)
+            # Store path instead of loading immediately (lazy loading)
+            self.position_paths[r_i] = pos_file
 
         self.stats = {}
         for recording_data in self.data_stats:
@@ -355,6 +358,10 @@ class EEGDataset(Dataset):
             raise ValueError(f"Invalid index format: {index}")
 
         b_rec, rec, offset = int(b_rec), int(rec), int(offset)
+
+        # Lazy load positions on first access
+        if b_rec not in self.positions_cache:
+            self.positions_cache[b_rec] = np.load(self.position_paths[b_rec])
 
         positions = self.positions_cache[b_rec].copy()
         eeg = self.files[b_rec][offset : offset + self.window_duration].copy()
@@ -428,7 +435,7 @@ def get_local_batch_size(c, global_batch_size):
 class GroupedSampler(Sampler):
     """Sampler that groups EEG windows by channel count for efficient batching."""
 
-    def __init__(self, dataset, batch_size, drop_last, n_gpu, mode="train"):
+    def __init__(self, dataset, batch_size, drop_last, n_gpu, rank=0, mode="train"):
         self.dataset = dataset
         self.segments = self.dataset.segments
         self.groups = self.dataset.groups
@@ -436,6 +443,7 @@ class GroupedSampler(Sampler):
         self.global_batch_size = batch_size
         self.drop_last = 0 if drop_last else 1
         self.n_gpu = n_gpu
+        self.rank = rank
 
         # Recording slices for locality
         self.recording_slices = {
@@ -523,8 +531,13 @@ class GroupedSampler(Sampler):
                     for i in range(len(group_indices) // self.global_batch_size + self.drop_last)
                 ]
 
+        # Drop batches that don't divide evenly across GPUs
         n_leftover_indices = len(indices) % self.n_gpu
-        self.indices = indices if n_leftover_indices == 0 else indices[:-n_leftover_indices]
+        if n_leftover_indices != 0:
+            indices = indices[:-n_leftover_indices]
+
+        # Shard indices across GPUs - each rank gets its own subset
+        self.indices = indices[self.rank::self.n_gpu]
 
         return iter(self.indices)
 
@@ -554,7 +567,16 @@ def build_eeg_dataloader(
     if state is None:
         state = EEGDataLoaderState()
 
-    recordings_path = pjoin(args.data_path, "recordings")
+    # Check for data in either 'recordings/' or 'data/' subdirectory
+    recordings_candidate = pjoin(args.data_path, "recordings")
+    data_candidate = pjoin(args.data_path, "data")
+    if os.path.exists(recordings_candidate):
+        recordings_path = recordings_candidate
+    elif os.path.exists(data_candidate):
+        recordings_path = data_candidate
+    else:
+        recordings_path = recordings_candidate  # fallback to original behavior
+
     csv_path = pjoin(args.data_path, "csv_recordings")
 
     # Read CSV metadata
@@ -582,7 +604,6 @@ def build_eeg_dataloader(
     data_stats = _filter_by_recording_set(csv_stats, recording_set)
 
     # Filter out recordings where files don't exist
-    import os
     existing_recordings = []
     for rec in data_big:
         r_i = int(rec["big_recording_index"])
@@ -621,12 +642,13 @@ def build_eeg_dataloader(
         manual_seed=False if train else 42,
     )
 
-    # Build sampler
+    # Build sampler with rank for data sharding
     sampler = GroupedSampler(
         dataset,
         batch_size=args.batch_size,
         drop_last=True,
         n_gpu=args.world_size,
+        rank=args.rank,
         mode="train" if train else "val",
     )
 
